@@ -4,31 +4,18 @@ enum class Players {
     E
 }
 
-
 var fieldSize = 3
 var field = MutableList(fieldSize) { MutableList<Players>(fieldSize) { Players.E } }
 
 
 fun userInputFieldSize() {
+    println("Если ввод будет некоректный  то размер поля будет по умолчанию")
     print("Введите размер поля(по умолчанию 3): ")
     fieldSize = readln().toIntOrNull() ?: 3
 
     field = MutableList(fieldSize) { MutableList<Players>(fieldSize) { Players.E } }
+    field[2][1] = Players.O
 }
-
-fun userTurn(){
-    var size = 0
-
-        print("Введите номер столбца: ")
-        val col = readln().toInt()
-        print("Введите номер ряда: ")
-        val row = readln().toInt()
-
-        field[col][row] = Players.X
-
-
-}
-
 
 fun printField() {
     field.forEach {
@@ -38,6 +25,24 @@ fun printField() {
         println()
     }
 }
+
+fun userTurnAndCheckCell() {
+    var size = 0
+
+    print("Введите номер столбца: ")
+    val col = readln().toInt()
+    print("Введите номер ряда: ")
+    val row = readln().toInt()
+
+
+    if (field[col][row] == Players.O) {
+        println("Ячейка занята, введите заново номер ячейки")
+    } else {
+        field[col][row] = Players.X
+    }
+
+}
+
 
 fun horizontal() {
     var counter = 0
@@ -49,7 +54,7 @@ fun horizontal() {
 
             if (counter == field.size) {
                 println("Победил игрок Х")
-                return
+                break
             }
         }
     }
@@ -106,9 +111,11 @@ fun main() {
     printField()
 
     var counter = 0
-    while (true){
-        userTurn()
+    while (true) {
+        //checkCell()
+        userTurnAndCheckCell()
         printField()
+        horizontal()
         counter++
 
         if (counter == field.size * field.size) return
