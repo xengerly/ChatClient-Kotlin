@@ -12,9 +12,10 @@ fun userInputFieldSize() {
     println("Если ввод будет некоректный  то размер поля будет по умолчанию")
     print("Введите размер поля(по умолчанию 3): ")
     fieldSize = readln().toIntOrNull() ?: 3
+    if (fieldSize < 2) fieldSize = 3
 
     field = MutableList(fieldSize) { MutableList<Players>(fieldSize) { Players.E } }
-    field[2][1] = Players.O
+    field[1][1] = Players.O
 }
 
 fun printField() {
@@ -27,7 +28,6 @@ fun printField() {
 }
 
 fun userTurnAndCheckCell() {
-    var size = 0
 
     print("Введите номер столбца: ")
     val col = readln().toInt()
@@ -35,16 +35,16 @@ fun userTurnAndCheckCell() {
     val row = readln().toInt()
 
 
-    if (field[col][row] == Players.O) {
-        println("Ячейка занята, введите заново номер ячейки")
-    } else {
+    if (field[col][row] == Players.E) {
         field[col][row] = Players.X
+    } else {
+        println("Ячейка занята, введите заново номер ячейки")
     }
 
 }
 
 
-fun horizontal() {
+fun checkHorizontalWin(): Boolean {
     var counter = 0
 
     for ((i, players) in field.withIndex()) {
@@ -54,13 +54,14 @@ fun horizontal() {
 
             if (counter == field.size) {
                 println("Победил игрок Х")
-                break
+                return true
             }
         }
     }
+    return false
 }
 
-fun vertical() {
+fun checkVerticalWin(): Boolean {
     var counter = 0
 
     for ((i, players) in field.withIndex()) {
@@ -70,13 +71,14 @@ fun vertical() {
 
             if (counter == field.size) {
                 println("Победил игрок Х")
-                return
+                return true
             }
         }
     }
+    return false
 }
 
-fun diagonalLeft() {
+fun checkDiagonalLeftWin(): Boolean {
     var counter = 0
 
     for ((i, players) in field.withIndex()) {
@@ -85,12 +87,13 @@ fun diagonalLeft() {
 
         if (counter == field.size) {
             println("Победил игрок Х")
-            return
+            return true
         }
     }
+    return false
 }
 
-fun diagonalRight() {
+fun checkDiagonalRightWin(): Boolean {
     var counter = 0
 
     for ((i, players) in field.withIndex()) {
@@ -99,26 +102,31 @@ fun diagonalRight() {
 
         if (counter == field.size) {
             println("Победил игрок Х")
-            return
+            return true
         }
     }
-
-
+    return false
 }
 
+
+
 fun main() {
+    val movesCounts = field.size * field.size
+    var counter = 0
+
     userInputFieldSize()
     printField()
 
-    var counter = 0
-    while (true) {
-        //checkCell()
+    var isWin: Boolean = false
+
+    while (!isWin) {
         userTurnAndCheckCell()
         printField()
-        horizontal()
-        counter++
+        isWin = checkHorizontalWin()
+//        isWin = checkVerticalWin()
+//        isWin = checkHorizontalWin()
+//        isWin = checkHorizontalWin()
 
-        if (counter == field.size * field.size) return
     }
 
 }
