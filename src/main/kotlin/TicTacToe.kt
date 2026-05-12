@@ -15,6 +15,8 @@ fun userInputFieldSize() {
     if (fieldSize < 2) fieldSize = 3
 
     field = MutableList(fieldSize) { MutableList<Players>(fieldSize) { Players.E } }
+    field[0][2] = Players.X
+    field[1][1] = Players.X
 }
 
 fun printField() {
@@ -43,12 +45,13 @@ fun userTurnAndCheckCell() {
 
 
 fun checkHorizontalWin(): Boolean {
-    var counter = 0
 
     for ((i, players) in field.withIndex()) {
+        var counter = 0
         for ((j, item) in field.withIndex()) {
 
             if (field[i][j] == Players.X) counter++
+
 
             if (counter == field.size) {
                 println("Победил игрок Х")
@@ -56,16 +59,19 @@ fun checkHorizontalWin(): Boolean {
             }
         }
     }
+
+
     return false
 }
 
 fun checkVerticalWin(): Boolean {
-    var counter = 0
 
     for ((i, players) in field.withIndex()) {
+        var counter = 0
         for ((j, item) in field.withIndex()) {
 
             if (field[j][i] == Players.X) counter++
+
 
             if (counter == field.size) {
                 println("Победил игрок Х")
@@ -106,7 +112,6 @@ fun checkDiagonalRightWin(): Boolean {
     return false
 }
 
-
 fun winCondition(): Boolean {
     return checkHorizontalWin() || checkVerticalWin() || checkDiagonalLeftWin() || checkDiagonalRightWin()
 }
@@ -117,6 +122,7 @@ fun main() {
 
     userInputFieldSize()
     printField()
+
 
     var isWin: Boolean = false
 
