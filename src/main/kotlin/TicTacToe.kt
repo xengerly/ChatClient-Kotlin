@@ -15,7 +15,6 @@ fun userInputFieldSize() {
     if (fieldSize < 2) fieldSize = 3
 
     field = MutableList(fieldSize) { MutableList<Players>(fieldSize) { Players.E } }
-    field[1][1] = Players.O
 }
 
 fun printField() {
@@ -33,7 +32,6 @@ fun userTurnAndCheckCell() {
     val col = readln().toInt()
     print("Введите номер ряда: ")
     val row = readln().toInt()
-
 
     if (field[col][row] == Players.E) {
         field[col][row] = Players.X
@@ -109,6 +107,9 @@ fun checkDiagonalRightWin(): Boolean {
 }
 
 
+fun winCondition(): Boolean {
+    return checkHorizontalWin() || checkVerticalWin() || checkDiagonalLeftWin() || checkDiagonalRightWin()
+}
 
 fun main() {
     val movesCounts = field.size * field.size
@@ -122,11 +123,7 @@ fun main() {
     while (!isWin) {
         userTurnAndCheckCell()
         printField()
-        isWin = checkHorizontalWin()
-//        isWin = checkVerticalWin()
-//        isWin = checkHorizontalWin()
-//        isWin = checkHorizontalWin()
-
+        isWin = winCondition()
     }
 
 }
