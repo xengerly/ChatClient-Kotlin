@@ -1,3 +1,5 @@
+import kotlin.random.Random
+
 enum class Players {
     X,
     O,
@@ -15,8 +17,7 @@ fun userInputFieldSize() {
     if (fieldSize < 2) fieldSize = 3
 
     field = MutableList(fieldSize) { MutableList<Players>(fieldSize) { Players.E } }
-    field[0][2] = Players.X
-    field[1][1] = Players.X
+
 }
 
 fun printField() {
@@ -43,38 +44,60 @@ fun userTurnAndCheckCell() {
 
 }
 
+fun computerTurnAndCheckCell() {
+    println("Ход компьютера")
+
+    val col = Random.nextInt(0, field.size)
+    val row = Random.nextInt(0, field.size)
+
+    if (field[row][col] == Players.E) {
+        field[row][col] = Players.O
+    } else {
+        println("Ячейка занята, введите заново номер ячейки")
+    }
+
+}
+
 
 fun checkHorizontalWin(): Boolean {
 
     for ((i, players) in field.withIndex()) {
-        var counter = 0
+        var counterX = 0
+        var counterO = 0
         for ((j, item) in field.withIndex()) {
 
-            if (field[i][j] == Players.X) counter++
+            if (field[i][j] == Players.X) counterX++
+            if (field[i][j] == Players.O) counterO++
 
-
-            if (counter == field.size) {
+            if (counterX == field.size) {
                 println("Победил игрок Х")
+                return true
+            }
+            if (counterO == field.size) {
+                println("Победил игрок O")
                 return true
             }
         }
     }
-
-
     return false
 }
 
 fun checkVerticalWin(): Boolean {
 
     for ((i, players) in field.withIndex()) {
-        var counter = 0
+        var counterX = 0
+        var counterO = 0
         for ((j, item) in field.withIndex()) {
 
-            if (field[j][i] == Players.X) counter++
+            if (field[j][i] == Players.X) counterX++
+            if (field[j][i] == Players.O) counterO++
 
-
-            if (counter == field.size) {
+            if (counterX == field.size) {
                 println("Победил игрок Х")
+                return true
+            }
+            if (counterO == field.size) {
+                println("Победил игрок O")
                 return true
             }
         }
@@ -83,14 +106,20 @@ fun checkVerticalWin(): Boolean {
 }
 
 fun checkDiagonalLeftWin(): Boolean {
-    var counter = 0
+    var counterX = 0
+    var counterO = 0
 
     for ((i, players) in field.withIndex()) {
 
-        if (field[i][i] == Players.X) counter++
+        if (field[i][i] == Players.X) counterX++
+        if (field[i][i] == Players.O) counterO++
 
-        if (counter == field.size) {
+        if (counterX == field.size) {
             println("Победил игрок Х")
+            return true
+        }
+        if (counterO == field.size) {
+            println("Победил игрок O")
             return true
         }
     }
@@ -98,14 +127,20 @@ fun checkDiagonalLeftWin(): Boolean {
 }
 
 fun checkDiagonalRightWin(): Boolean {
-    var counter = 0
+    var counterX = 0
+    var counterO = 0
 
     for ((i, players) in field.withIndex()) {
 
-        if (field[field.size - 1 - i][i] == Players.X) counter++
+        if (field[field.size - 1 - i][i] == Players.X) counterX++
+        if (field[field.size - 1 - i][i] == Players.O) counterO++
 
-        if (counter == field.size) {
+        if (counterX == field.size) {
             println("Победил игрок Х")
+            return true
+        }
+        if (counterO == field.size) {
+            println("Победил игрок O")
             return true
         }
     }
@@ -128,6 +163,8 @@ fun main() {
 
     while (!isWin) {
         userTurnAndCheckCell()
+        printField()
+        computerTurnAndCheckCell()
         printField()
         isWin = winCondition()
     }
