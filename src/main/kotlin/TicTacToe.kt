@@ -1,3 +1,4 @@
+import java.util.Scanner
 import kotlin.random.Random
 
 enum class Players {
@@ -29,7 +30,9 @@ fun printField() {
     }
 }
 
-fun userTurnAndCheckCell() {
+
+fun userTurnAndCheckCell(playersSymbol: Players) {
+    println("Ход $playersSymbol")
 
     print("Введите номер столбца: ")
     val col = readln().toInt()
@@ -37,46 +40,40 @@ fun userTurnAndCheckCell() {
     val row = readln().toInt()
 
     if (field[col][row] == Players.E) {
-        field[col][row] = Players.X
+        field[col][row] = playersSymbol
     } else {
         println("Ячейка занята, введите заново номер ячейки")
     }
 
 }
 
-fun computerTurnAndCheckCell() {
-    println("Ход компьютера")
+fun computerTurnAndCheckCell(computerSymbol: Players) {
+    println("Ход $computerSymbol")
 
     val col = Random.nextInt(0, field.size)
     val row = Random.nextInt(0, field.size)
 
-    if (field[row][col] == Players.E) {
-        field[row][col] = Players.O
+    if (field[col][row] == Players.E) {
+        field[col][row] = computerSymbol
     } else {
         println("Ячейка занята, введите заново номер ячейки")
     }
 
 }
 
-
 fun checkHorizontalWin(): Boolean {
 
     for ((i, players) in field.withIndex()) {
-        var counterX = 0
-        var counterO = 0
+        var counter = 0
         for ((j, item) in field.withIndex()) {
 
-            if (field[i][j] == Players.X) counterX++
-            if (field[i][j] == Players.O) counterO++
+            if (field[i][j] == Players.X) counter++
 
-            if (counterX == field.size) {
+            if (counter == field.size) {
                 println("Победил игрок Х")
                 return true
             }
-            if (counterO == field.size) {
-                println("Победил игрок O")
-                return true
-            }
+
         }
     }
     return false
@@ -152,21 +149,25 @@ fun winCondition(): Boolean {
 }
 
 fun main() {
-    val movesCounts = field.size * field.size
-    var counter = 0
+
+    val scanner: Scanner = Scanner(System.`in`)
+    print("Выберите за кого хотите играть X/O: ")
+    val userInput = scanner.next().first()
+
+    var playersSymbol = if (userInput == 'X') Players.X else Players.O
+    var computerSymbol = if (playersSymbol == Players.X) Players.O else Players.X
 
     userInputFieldSize()
     printField()
 
-
     var isWin: Boolean = false
 
     while (!isWin) {
-        userTurnAndCheckCell()
+        userTurnAndCheckCell(playersSymbol)
         printField()
-        computerTurnAndCheckCell()
+        computerTurnAndCheckCell(computerSymbol)
         printField()
         isWin = winCondition()
     }
-
+    println("Спасибо за партию! ")
 }
