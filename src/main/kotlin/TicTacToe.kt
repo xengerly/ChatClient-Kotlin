@@ -125,7 +125,6 @@ fun winCondition(symbol: Players): Boolean {
             checkVerticalWin(symbol) ||
             checkDiagonalLeftWin(symbol) ||
             checkDiagonalRightWin(symbol)
-
 }
 
 fun main() {
@@ -142,14 +141,25 @@ fun main() {
 
     var isWin: Boolean = false
 
-    while (!isWin) {
+    while (true) {
         userTurnAndCheckCell(playersSymbol)
-        isWin = winCondition(playersSymbol)
+        winCondition(playersSymbol)
         printField()
+        if (winCondition(playersSymbol) == true){
+            println("Выйграл Игрок")
+            break
+        }
         computerTurnAndCheckCell(computerSymbol)
-        isWin = winCondition(computerSymbol)
+        winCondition(computerSymbol)
         printField()
+        if (winCondition(computerSymbol) == true){
+            println("Выйграл Компьютер")
+            break
+        }
     }
+
+
+
     println()
     //printField()
     println("Спасибо за партию! ")
