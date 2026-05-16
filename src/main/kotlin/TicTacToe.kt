@@ -2,9 +2,7 @@ import java.util.Scanner
 import kotlin.random.Random
 
 enum class Players {
-    X,
-    O,
-    E
+    X, O, E
 }
 
 var fieldSize = 3
@@ -56,45 +54,37 @@ fun computerTurnAndCheckCell(computerSymbol: Players) {
     if (field[col][row] == Players.E) {
         field[col][row] = computerSymbol
     } else {
-        println("Ячейка занята, введите заново номер ячейки")
+        println("Ячейка занята")
     }
 
 }
 
-fun checkHorizontalWin(): Boolean {
+fun checkHorizontalWin(symbol: Players): Boolean {
+
+    for ((i, players) in field.withIndex()) {
+        var counter = 0
+
+        for ((j, item) in field.withIndex()) {
+            if (field[i][j] == symbol) counter++
+
+            if (counter == field.size) {
+                return true
+            }
+
+        }
+    }
+    return false
+}
+
+fun checkVerticalWin(playersSymbol: Players): Boolean {
 
     for ((i, players) in field.withIndex()) {
         var counter = 0
         for ((j, item) in field.withIndex()) {
 
-            if (field[i][j] == Players.X) counter++
+            if (field[j][i] == playersSymbol) counter++
 
             if (counter == field.size) {
-                println("Победил игрок Х")
-                return true
-            }
-
-        }
-    }
-    return false
-}
-
-fun checkVerticalWin(): Boolean {
-
-    for ((i, players) in field.withIndex()) {
-        var counterX = 0
-        var counterO = 0
-        for ((j, item) in field.withIndex()) {
-
-            if (field[j][i] == Players.X) counterX++
-            if (field[j][i] == Players.O) counterO++
-
-            if (counterX == field.size) {
-                println("Победил игрок Х")
-                return true
-            }
-            if (counterO == field.size) {
-                println("Победил игрок O")
                 return true
             }
         }
@@ -102,50 +92,40 @@ fun checkVerticalWin(): Boolean {
     return false
 }
 
-fun checkDiagonalLeftWin(): Boolean {
-    var counterX = 0
-    var counterO = 0
+fun checkDiagonalLeftWin(playersSymbol: Players): Boolean {
+    var counter = 0
+
 
     for ((i, players) in field.withIndex()) {
+        if (field[i][i] == playersSymbol) counter++
 
-        if (field[i][i] == Players.X) counterX++
-        if (field[i][i] == Players.O) counterO++
-
-        if (counterX == field.size) {
-            println("Победил игрок Х")
-            return true
-        }
-        if (counterO == field.size) {
-            println("Победил игрок O")
+        if (counter == field.size) {
             return true
         }
     }
     return false
 }
 
-fun checkDiagonalRightWin(): Boolean {
-    var counterX = 0
-    var counterO = 0
+fun checkDiagonalRightWin(playersSymbol: Players,): Boolean {
+    var counter = 0
+
 
     for ((i, players) in field.withIndex()) {
+        if (field[field.size - 1 - i][i] == playersSymbol) counter++
 
-        if (field[field.size - 1 - i][i] == Players.X) counterX++
-        if (field[field.size - 1 - i][i] == Players.O) counterO++
-
-        if (counterX == field.size) {
-            println("Победил игрок Х")
-            return true
-        }
-        if (counterO == field.size) {
-            println("Победил игрок O")
+        if (counter == field.size) {
             return true
         }
     }
     return false
 }
 
-fun winCondition(): Boolean {
-    return checkHorizontalWin() || checkVerticalWin() || checkDiagonalLeftWin() || checkDiagonalRightWin()
+fun winCondition(symbol: Players): Boolean {
+    return checkHorizontalWin(symbol) ||
+            checkVerticalWin(symbol) ||
+            checkDiagonalLeftWin(symbol) ||
+            checkDiagonalRightWin(symbol)
+
 }
 
 fun main() {
@@ -164,10 +144,13 @@ fun main() {
 
     while (!isWin) {
         userTurnAndCheckCell(playersSymbol)
+        isWin = winCondition(playersSymbol)
         printField()
         computerTurnAndCheckCell(computerSymbol)
+        isWin = winCondition(computerSymbol)
         printField()
-        isWin = winCondition()
     }
+    println()
+    //printField()
     println("Спасибо за партию! ")
 }
