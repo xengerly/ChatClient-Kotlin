@@ -106,7 +106,7 @@ fun checkDiagonalLeftWin(playersSymbol: Players): Boolean {
     return false
 }
 
-fun checkDiagonalRightWin(playersSymbol: Players,): Boolean {
+fun checkDiagonalRightWin(playersSymbol: Players): Boolean {
     var counter = 0
 
 
@@ -127,7 +127,29 @@ fun winCondition(symbol: Players): Boolean {
             checkDiagonalRightWin(symbol)
 }
 
+fun checkDraw(): Boolean {
+
+    //val filedSize = fieldSize * fieldSize
+    var counter = fieldSize * fieldSize
+
+    for ((i, players) in field.withIndex()) {
+        for ((j, item) in field.withIndex()) {
+
+            if (field[i][j] == Players.X || field[i][j] == Players.O) {
+                counter--
+            }
+
+            if (counter == 0) {
+                return true
+            }
+        }
+    }
+    return false
+}
+
 fun main() {
+
+    val filedSize = fieldSize * fieldSize
 
     val scanner: Scanner = Scanner(System.`in`)
     print("Выберите за кого хотите играть X/O: ")
@@ -140,25 +162,28 @@ fun main() {
     printField()
 
     var isWin: Boolean = false
-    var winSymbol = playersSymbol
+    var winSymbol = Players.E
 
     while (true) {
         userTurnAndCheckCell(playersSymbol)
         winCondition(playersSymbol)
         printField()
-        if (winCondition(playersSymbol)){
+        if (winCondition(playersSymbol)) {
             winSymbol = playersSymbol
             break
         }
         computerTurnAndCheckCell(computerSymbol)
         winCondition(computerSymbol)
         printField()
-        if (winCondition(computerSymbol)){
+        if (winCondition(computerSymbol)) {
             winSymbol = computerSymbol
             break
         }
+        if (checkDraw()) {
+            println("Ничья")
+            break
+        }
     }
-
     println()
     //printField()
 
