@@ -140,27 +140,29 @@ fun main() {
     printField()
 
     var isWin: Boolean = false
+    var winSymbol = playersSymbol
 
     while (true) {
         userTurnAndCheckCell(playersSymbol)
         winCondition(playersSymbol)
         printField()
-        if (winCondition(playersSymbol) == true){
-            println("Выйграл Игрок")
+        if (winCondition(playersSymbol)){
+            winSymbol = playersSymbol
             break
         }
         computerTurnAndCheckCell(computerSymbol)
         winCondition(computerSymbol)
         printField()
-        if (winCondition(computerSymbol) == true){
-            println("Выйграл Компьютер")
+        if (winCondition(computerSymbol)){
+            winSymbol = computerSymbol
             break
         }
     }
 
-
-
     println()
     //printField()
+
+    println("Выйграл игрок $winSymbol")
+
     println("Спасибо за партию! ")
 }
