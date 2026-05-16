@@ -180,14 +180,20 @@ fun main() {
             break
         }
         if (checkDraw()) {
-            println("Ничья")
             break
         }
     }
     println()
     //printField()
 
-    println("Выйграл игрок $winSymbol")
+
+    when(winSymbol){
+        Players.X -> println("Выйграл игрок $winSymbol")
+        Players.O -> println("Выйграл игрок $winSymbol")
+        else -> println("Ничья")
+    }
+
+
 
     println("Спасибо за партию! ")
 }
