@@ -29,32 +29,40 @@ fun printField() {
 }
 
 
-fun userTurnAndCheckCell(playersSymbol: Players) {
+fun userTurnAndCheckCell(playersSymbol: Players): Boolean {
     println("Ход $playersSymbol")
 
-    print("Введите номер столбца: ")
-    val col = readln().toInt()
-    print("Введите номер ряда: ")
-    val row = readln().toInt()
 
-    if (field[col][row] == Players.E) {
-        field[col][row] = playersSymbol
-    } else {
-        println("Ячейка занята, введите заново номер ячейки")
+    while (true) {
+        print("Введите номер столбца: ")
+        val col = readln().toInt()
+        print("Введите номер ряда: ")
+        val row = readln().toInt()
+
+        if (field[col][row] == Players.E) {
+            field[col][row] = playersSymbol
+            return true
+        } else {
+            println("Ячейка занята, введите заново номер ячейки")
+        }
     }
+
 
 }
 
-fun computerTurnAndCheckCell(computerSymbol: Players) {
+fun computerTurnAndCheckCell(computerSymbol: Players): Boolean {
     println("Ход $computerSymbol")
 
-    val col = Random.nextInt(0, field.size)
-    val row = Random.nextInt(0, field.size)
+    while (true) {
+        val col = Random.nextInt(0, field.size)
+        val row = Random.nextInt(0, field.size)
 
-    if (field[col][row] == Players.E) {
-        field[col][row] = computerSymbol
-    } else {
-        println("Ячейка занята")
+        if (field[col][row] == Players.E) {
+            field[col][row] = computerSymbol
+            return true
+        } else {
+            println("Ячейка занята, компьютер гинерирует заново")
+        }
     }
 
 }
@@ -166,14 +174,12 @@ fun main() {
 
     while (true) {
         userTurnAndCheckCell(playersSymbol)
-        winCondition(playersSymbol)
         printField()
         if (winCondition(playersSymbol)) {
             winSymbol = playersSymbol
             break
         }
         computerTurnAndCheckCell(computerSymbol)
-        winCondition(computerSymbol)
         printField()
         if (winCondition(computerSymbol)) {
             winSymbol = computerSymbol
@@ -184,12 +190,11 @@ fun main() {
         }
     }
     println()
-    //printField()
 
+    val resultGame = println("Выйграл игрок $winSymbol")
 
-    when(winSymbol){
-        Players.X -> println("Выйграл игрок $winSymbol")
-        Players.O -> println("Выйграл игрок $winSymbol")
+    when (winSymbol) {
+        Players.X, Players.O -> resultGame
         else -> println("Ничья")
     }
 
