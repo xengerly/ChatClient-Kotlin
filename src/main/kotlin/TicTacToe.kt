@@ -43,11 +43,11 @@ fun userTurnAndCheckCell(playersSymbol: Players): Boolean {
             field[col][row] = playersSymbol
             return true
         } else {
+            if (checkDraw()) break
             println("Ячейка занята, введите заново номер ячейки")
         }
     }
-
-
+    return false
 }
 
 fun computerTurnAndCheckCell(computerSymbol: Players): Boolean {
@@ -61,10 +61,12 @@ fun computerTurnAndCheckCell(computerSymbol: Players): Boolean {
             field[col][row] = computerSymbol
             return true
         } else {
+            if (checkDraw()) break
             println("Ячейка занята, компьютер гинерирует заново")
         }
     }
 
+    return false
 }
 
 fun checkHorizontalWin(symbol: Players): Boolean {
